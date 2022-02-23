@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "outDir": "./bin",
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "removeComments": true,
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strict": false,
+        "skipLibCheck": true,
+        "paths": {
+            "@shared/*": [
+                "../shared/*"
+            ],
+        },
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/types"
+        ],
+        "lib": [
+            "es7",
+            "es2017.object"
+        ]
+    },
+    "include": [
+        "src/**/*.ts"
+, "src/main2ts"    ],
+}
