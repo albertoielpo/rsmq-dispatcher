@@ -10,11 +10,11 @@ export class App {
 
     private rsmq: any = null;
 
-    public init(config: {host:string, port:number, ns: string}) {
-        this.rsmq = new RedisSMQ({ 
-            host: config.host, 
-            port: config.port, 
-            ns: config.ns 
+    public init(config: { host: string, port: number, ns: string }) {
+        this.rsmq = new RedisSMQ({
+            host: config.host,
+            port: config.port,
+            ns: config.ns
         });
     }
 
@@ -65,7 +65,7 @@ export class App {
         });
     }
 
-    public async sendMessage(qname: string, payload: any) : Promise<any> {
+    public async sendMessage(qname: string, payload: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.rsmq.sendMessage({ qname: qname, message: JSON.stringify(payload) },
                 function (err, resp) {
@@ -83,17 +83,21 @@ export class App {
     /**
      * exec the program
      */
-    public async exec(config:any, queue:string, payload:any) {
-        this.init(config);
-        const listQueues : string[] = await this.listQueues();
-        console.log(listQueues);
-        if(listQueues.indexOf(queue) != -1){
-            await this.sendMessage(queue, payload);
-            console.log("end...");
-        } else {
-            console.error("queue not found");
+    public async exec(config: any, queue: string, payload: any) {
+        try {
+            this.init(config);
+            const listQueues: string[] = await this.listQueues();
+            console.log(listQueues);
+            if (Array.isArray(listQueues) && listQueues.indexOf(queue) != -1) {
+                await this.sendMessage(queue, payload);
+                console.log("end...");
+            } else {
+                console.error("queue not found!");
+            }
+        } catch (error) {
+            console.error(error);
         }
-        
+
         exit(); //kill the thread
     }
 }
