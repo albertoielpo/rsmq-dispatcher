@@ -1,16 +1,22 @@
+import { exit } from "node:process";
+import { RedisSMQApp } from "./redisSMQApp";
+
+const dispatcher = new RedisSMQApp();
+
 /**
  * start the program
  */
-const app = require('./app');
-const dispatcher = new app.App();
+(async () => {
+    const config = {
+        host: "127.0.0.1",
+        port: 6379,
+        ns: "{rsmq}"
+    };
 
-const config = {
-    host: "127.0.0.1",
-    port: 6379,
-    ns: "{rsmq}"
-}
+    const queue = "QUEUE-NAME";
+    const payload = {};
 
-const queue = "QUEUE-NAME";
-const payload = {};
+    await dispatcher.exec(config, queue, payload);
 
-dispatcher.exec(config, queue, payload);
+    exit(); //kill the thread
+})();
